@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rhythmify</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: white;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #333;
+        }
+
+        header .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #8e44ad;
+        }
+
+        header .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: #c8a5e3;
+            padding: 8px 12px;
+            border-radius: 20px;
+            color: black;
+            width: 400px;
+        }
+
+        header .search-bar input {
+            background-color: transparent;
+            border: none;
+            margin-left: 10px;
+            outline: none;
+            color: black;
+            width: 150px;
+        }
+
+        header .user {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .content {
+            display: flex;
+            flex: 1;
+        }
+
+        .sidebar {
+            width: 20%;
+            background-color: #1f1f1f;
+            padding: 20px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar .library-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .sidebar .library-header h2 {
+            color: white;
+            font-size: 18px;
+        }
+
+        .library-header .add-button,
+        .library-header .arrow-button {
+            background-color: #8e44ad;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .tabs button {
+            background-color: #8e44ad;
+            border: none;
+            border-radius: 20px;
+            padding: 10px;
+            color: white;
+            cursor: pointer;
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+
+        .tabs button:last-child {
+            margin-right: 0;
+        }
+
+        .tabs button:hover {
+            background-color: #a569bd;
+        }
+
+        .library ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .library ul li {
+            display: flex;
+            align-items: center;
+            background-color: #333;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .library ul li img {
+            width: 50px;
+            height: 50px;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+
+        .library ul li span {
+            font-size: 16px;
+        }
+
+        .library ul li:hover {
+            background-color: #8e44ad;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            background-color: #1f1f1f;
+            height: 700px;
+        }
+
+        .main-content h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .playlists {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .playlist {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .playlist img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .playlist span {
+            display: block;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #333;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .playingmusic {
+            display: flex;
+            align-items: center;
+            /* Centraliza verticalmente */
+            justify-content: flex-start;
+            /* Alinha à esquerda */
+            width: 20%;
+            /* Ajusta a largura da div */
+        }
+
+        .playingmusic img {
+            margin-right: 10px;
+            /* Espaçamento entre a imagem e o texto */
+        }
+
+        .progress-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50%;
+            /* Ajuste de acordo com o design */
+            padding: 0 20px;
+            /* Espaçamento entre os elementos */
+        }
+
+        .duration-bar {
+            -webkit-appearance: none;
+            /* Remove o estilo padrão no Chrome/Safari */
+            appearance: none;
+            width: 100%;
+            height: 5px;
+            background: #8e44ad;
+            outline: none;
+            border-radius: 5px;
+            transition:  0.3s;
+        }
+
+        .duration-bar::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            background: #c8a5e3;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .duration-bar::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            background: #c8a5e3;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .player-controls {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 20%;
+        }
+
+        .player-controls button {
+            padding: 10px;
+            gap: 10px;
+            background-color: #c8a5e3;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .player-controls button:hover {
+            background-color: #8e44ad;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <img style="width: 60px;" src="imgs/logo.png" alt="Rhythmify Logo">
+            <div class="search-bar">
+                <input type="text" placeholder="O que você quer ouvir?">
+            </div>
+            <div style="margin-right: 30px;" class="user">
+                <a href="usuario.html"> 
+                    <i class="icon-user">
+                        <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#8e44ad">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0" />
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" />
+                            <g id="SVGRepo_iconCarrier">
+                                <circle cx="12" cy="9" r="3" stroke="#8e44ad" stroke-width="1.5" />
+                                <circle cx="12" cy="12" r="10" stroke="#8e44ad" stroke-width="1.5" />
+                                <path d="M17.9691 20C17.81 17.1085 16.9247 15 11.9999 15C7.07521 15 6.18991 17.1085 6.03076 20" stroke="#8e44ad" stroke-width="1.5" stroke-linecap="round" />
+                            </g>
+                        </svg>
+                    </i>
+                </a>
+            </div>
+        </header>
+        
+
+        <div class="content">
+            <aside class="sidebar">
+                <div class="library-header">
+                    <h2>Sua biblioteca</h2>
+                    <div>
+                        <span class="add-button">+</span>
+                        <span class="arrow-button">→</span>
+                    </div>
+                </div>
+
+                <div class="tabs">
+                    <button>Playlists</button>
+                    <button>Artistas</button>
+                    <button>Álbuns</button>
+                </div>
+
+                <div class="library">
+                    <ul>
+                        <li onclick="playPlaylist('Br.Br')">
+                            <img src="imgs/0526a448-9d5e-4a19-b336-b46ff1693baf.jpg" alt="Br.Br">
+                            <span>Br.Br</span>
+                        </li>
+                        <li onclick="playPlaylist('Gym')">
+                            <img src="imgs/download.jpg" alt="Gym">
+                            <span>Gym</span>
+                        </li>
+                        <li onclick="playPlaylist('Musica.Atualizada')">
+                            <img src="imgs/Altinha br.jpg" alt="Musica.Atualizada">
+                            <span>Musica.Atualizada</span>
+                        </li>
+                        <li onclick="playPlaylist('Carnaval-2024')">
+                            <img src="imgs/“𝐦𝐢𝐚 𝐡𝐚𝐧𝐧𝐚𝐡 ♡“.jpg" alt="Carnaval-2024">
+                            <span>Carnaval-2025</span>
+                        </li>
+                        <li onclick="playPlaylist('Verão-Pop')">
+                            <img src="imgs/download (1).jpg" alt="Verão-Pop">
+                            <span>Verão-Pop</span>
+                        </li>
+
+                    </ul>
+                </div>
+            </aside>
+
+            <main class="main-content">
+                <h2>Suas músicas estão com saudade:</h2>
+                <div style="width: 600px;" class="playlists">
+                    <div class="playlist">
+                        <img src="imgs/louco_voltar.jpg" alt="Playlist 1">
+                        <span>Louco Para Voltar</span>
+                    </div>
+                    <div class="playlist">
+                        <img src="imgs/funk_hits.jfif" alt="Playlist 2">
+                        <span>Funk hits</span>
+                    </div>
+                    <div class="playlist">
+                        <img src="imgs/ig_listen.jpg" alt="Playlist 3">
+                        <span>Todo mundo odeia o Ig</span>
+                    </div>
+                </div>
+                <h2>Feito para *usuário*</h2>
+                <div style="width: 600px;" class="playlists">
+                    <div class="playlist">
+                        <img src="imgs/to_be_brasilia.jpg" alt="Playlist 1">
+                        <span>To Be Brasília</span>
+                    </div>
+                    <div class="playlist">
+                        <img src="imgs/marilia.jpg" alt="Playlist 2">
+                        <span>Marília Mendonça - ao vivo</span>
+                    </div>
+                    <div class="playlist">
+                        <img src="imgs/starboy.jpg" alt="Playlist 3">
+                        <span>Starboy</span>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <footer>
+            <div class="playingmusic">
+                <img style="border-radius: 8px; width: 50px; " src="imgs/song_ret.jfif" alt="">
+                <span>7 meiota</span>
+            </div>
+
+            <!-- Barra de duração da música -->
+            <div class="progress-bar">
+                <input type="range" min="0" max="100" value="50" class="duration-bar">
+            </div>
+
+            <div class="player-controls">
+                <button id="prevButton">
+                    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+                    <svg width="25px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M20.003 18.9423L18.9423 20.003L15.9193 16.98C14.655 18.229 12.9176 19 11 19C8.76823 19 6.78139 17.9557 5.5 16.3303L5.5 18L4 18L4.00001 13.5H8.4138V15H6.38927C7.37111 16.5058 9.07009 17.5 11 17.5C14.0376 17.5 16.5 15.0376 16.5 12H18C18 13.4058 17.5856 14.7149 16.8722 15.8116L20.003 18.9423Z"
+                            fill="#1F2328" />
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M16.5 7.16965L16.5 5.5L18 5.5L18 10H13.5862V8.5H15.6107C14.6289 6.99416 12.9299 6 11 6C7.96244 6 5.50001 8.46243 5.50001 11.5H4.00001C4.00001 7.63401 7.13401 4.5 11 4.5C13.2318 4.5 15.2186 5.54431 16.5 7.16965Z"
+                            fill="#1F2328" />
+                    </svg>
+                </button>
+                <button id="playButton">
+                    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+                    <svg width="25px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M16.6582 9.28638C18.098 10.1862 18.8178 10.6361 19.0647 11.2122C19.2803 11.7152 19.2803 12.2847 19.0647 12.7878C18.8178 13.3638 18.098 13.8137 16.6582 14.7136L9.896 18.94C8.29805 19.9387 7.49907 20.4381 6.83973 20.385C6.26501 20.3388 5.73818 20.0469 5.3944 19.584C5 19.053 5 18.1108 5 16.2264V7.77357C5 5.88919 5 4.94701 5.3944 4.41598C5.73818 3.9531 6.26501 3.66111 6.83973 3.6149C7.49907 3.5619 8.29805 4.06126 9.896 5.05998L16.6582 9.28638Z"
+                            stroke="#000000" stroke-width="2" stroke-linejoin="round" />
+                    </svg>
+                </button>
+                <button id="nextButton">
+                    <?xml version="1.0" encoding="utf-8"?>
+
+                    <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+                    <svg width="25px" height="20px" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g id="next">
+                            <g id="next_2">
+                                <path id="Combined Shape" fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M18.9792 32.3759L8.69035 39.3951C6.69889 40.7537 3.99878 39.3269 3.99878 36.917V11.005C3.99878 8.59361 6.69843 7.166 8.69028 8.52489L27.6843 21.4809C29.4304 22.672 29.4304 25.249 27.6843 26.4371L20.9792 31.0114V36.9144C20.9792 37.7185 21.8791 38.1937 22.5432 37.7406L41.5107 24.787C42.0938 24.3882 42.0938 23.5316 41.5112 23.1342L22.5436 10.1805C21.8791 9.72714 20.9792 10.2023 20.9792 11.0064V11.9464C20.9792 12.4987 20.5315 12.9464 19.9792 12.9464C19.4269 12.9464 18.9792 12.4987 18.9792 11.9464V11.0064C18.9792 8.59492 21.6789 7.16945 23.6711 8.52861L42.6387 21.4823C44.3845 22.6732 44.3845 25.2446 42.6391 26.4382L23.6707 39.3925C21.6789 40.7514 18.9792 39.3259 18.9792 36.9144V32.3759ZM18.9792 29.9548L7.56322 37.7429C6.89939 38.1958 5.99878 37.7199 5.99878 36.917V11.005C5.99878 10.2003 6.89924 9.72409 7.56321 10.1771L26.5573 23.1331C27.1391 23.53 27.1391 24.389 26.5582 24.7842L20.9792 28.5904V24.9184C20.9792 24.3661 20.5315 23.9184 19.9792 23.9184C19.4269 23.9184 18.9792 24.3661 18.9792 24.9184V29.9548Z"
+                                    fill="#000000" />
+                            </g>
+                        </g>
+                    </svg>
+                </button>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>

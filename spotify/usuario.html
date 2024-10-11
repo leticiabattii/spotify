@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rhythmify</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #000;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        header img {
+            height: 60px;
+        }
+        header .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: #c8a5e3;
+            padding: 8px 12px;
+            border-radius: 20px;
+            color: black;
+            width: 400px;
+        }
+        header .search-bar input {
+            background-color: transparent;
+            border: none;
+            margin-left: 10px;
+            outline: none;
+            color: black;
+            width: 150px;
+        }
+        .btn {
+            background-color: #c8a5e3;
+            color: black;
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+        .container {
+            display: flex;
+            padding: 20px;
+        }
+        .sidebar {
+            background-color: #333;
+            padding: 20px;
+            width: 300px;
+            height: auto;
+            border-radius: 8px;
+            margin-right: 20px;
+        }
+        .sidebar h2 {
+            margin-top: 0;
+            font-size: 24px;
+        }
+        .create-playlist-btn {
+            background-color: #c8a5e3;
+            color: black;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+        }
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .profile-section {
+            text-align: center;
+        }
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .profile-avatar {
+            position: relative;
+            cursor: pointer;
+        }
+        .avatar-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 3px solid #c8a5e3;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        .profile-avatar:hover .avatar-image {
+            transform: scale(1.1);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            background-color: rgb(82, 82, 82);
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #c8a5e3;
+            color: black;;
+            width: 300px;
+            border-radius: 10px;
+            text-align: left;
+        }
+        .margin-item{
+            margin-left: -18px;
+        }
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-btn:hover,
+        .close-btn:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .modal-item {
+            margin-bottom: 15px;
+        }
+        .save-btn {
+            background-color: #28a745;
+            color: rgb(0, 0, 0);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .save-btn:hover {
+            background-color: #218838;
+        }
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #c8a5e3;
+            color: black;;
+            border-radius: 5px;
+            margin-left: -9px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="imgs/logo.png" alt="Rhythmify Logo">
+        <div class="search-bar">
+            <span>
+                <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11 6C13.7614 6 16 8.23858 16 11M16.6588 16.6549L21 21M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+            <input type="text" placeholder="O que você quer ouvir?">
+        </div>
+        <div>
+            <a href="#" class="btn">Inscrever-se</a>
+            <a href="#" class="btn">Entrar</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="sidebar">
+            <h2>
+                <svg fill="#000000" width="28px" height="28px" viewBox="0 0 36 36" version="1.1" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+                    <title>library-line</title>
+                    <path d="M33.48,29.63,26.74,11.82a2,2,0,0,0-2.58-1.16L21,11.85V8.92A1.92,1.92,0,0,0,19.08,7H14V4.92A1.92,1.92,0,0,0,12.08,3H5A2,2,0,0,0,3,5V32a1,1,0,0,0,1,1H20a1,1,0,0,0,1-1V19.27l5,13.21a1,1,0,0,0,1.29.58l5.61-2.14a1,1,0,0,0,.58-1.29ZM12,8.83V31H5V5h7ZM19,31H14V9h5Zm8.51-.25L21.13,13.92l3.74-1.42,6.39,16.83Z" class="clr-i-outline clr-i-outline-path-1"></path>
+                    <rect x="0" y="0" width="36" height="36" fill-opacity="0"/>
+                </svg>
+                Sua biblioteca
+            </h2>
+            <div class="create-playlist-btn">Crie sua primeira playlist
+                <svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                     width="23px" height="23px" viewBox="0 0 895.401 895.4"
+                     xml:space="preserve">
+                <g>
+                    <g>
+                        <path d="M328.177,875.4c0,11,9,20,20,20h295.599c11,0,20-9,20-20V829.6H328.177V875.4z"/>
+                        <path d="M321.477,322.9l0.101-146.3c0-16.9,6.399-32.7,18.1-44.5c13-13,31.6-20.4,51.2-20.4c15.3,0,30,4.7,41.399,13.1
+                            c13.2,10.1,21.3,24.6,21.3,40.5v8.6c0,16.9-6.4,32.7-18.1,44.5C366.094,310.5,348.477,317,328.177,322.9z"/>
+                    </g>
+                </g>
+                </svg>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="profile-section">
+                <h2 class="section-title">Meu Perfil</h2>
+                <div class="profile-header">
+                    <div class="profile-avatar" onclick="openModal()">
+                        <img src="imgs/account.png" alt="Imagem do perfil" class="avatar-image">
+                    </div>
+                    <h3 id="username">Nome de Usuário</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div class="modal-item">
+                <label for="profilePic">Escolha uma nova imagem:</label>
+                <input type="file" id="profilePic" accept="image/*" onchange="previewImage(event)">
+            </div>
+            <div class="modal-item">
+                <label for="usernameInput">Nome de usuário:</label>
+                <input type="text" id="usernameInput" value="Nome de Usuário" maxlength="100">
+            </div>
+            <button class="save-btn" onclick="saveProfile()">Salvar</button>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById('profileModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('profileModal').style.display = 'none';
+        }
+
+        function previewImage(event) {
+            const image = document.querySelector('.avatar-image');
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                image.src = e.target.result;
+                localStorage.setItem('profileImage', e.target.result); // Salvar a imagem no localStorage
+            };
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function saveProfile() {
+            const username = document.getElementById('usernameInput').value;
+            document.getElementById('username').innerText = username;
+            localStorage.setItem('username', username); // Salvar o nome de usuário
+            closeModal();
+        }
+
+        window.onload = function() {
+            const savedUsername = localStorage.getItem('username');
+            const savedProfileImage = localStorage.getItem('profileImage');
+
+            if (savedUsername) {
+                document.getElementById('username').innerText = savedUsername;
+                document.getElementById('usernameInput').value = savedUsername; // Preencher o input
+            }
+
+            if (savedProfileImage) {
+                document.querySelector('.avatar-image').src = savedProfileImage; // Definir a imagem de perfil
+            }
+        };
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('profileModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+
+</body>
+</html>
